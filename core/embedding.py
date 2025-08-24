@@ -10,4 +10,16 @@ class EmbeddingGenerator:
         self.model = SentenceTransformer(model_name)
 
     def embed_documents(self, docs: List[Document]):
-        pass
+        texts = [doc.page_content for doc in docs]
+        embeddings = self.model.encode(texts, batch_size=32, show_progres_bar=T)
+
+        results = []
+
+        for i, doc in enumerate(docs):
+            results.append({
+                "embedding": embeddings[i],
+                "text": doc.page_content,
+                "metadata": doc.metadata
+            })
+        
+        return results
