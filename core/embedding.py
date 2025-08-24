@@ -11,7 +11,7 @@ class EmbeddingGenerator:
 
     def embed_documents(self, docs: List[Document]):
         texts = [doc.page_content for doc in docs]
-        embeddings = self.model.encode(texts, batch_size=32, show_progres_bar=T)
+        embeddings = self.model.encode(texts, batch_size=32, show_progress_bar=True)
 
         results = []
 
