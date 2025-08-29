@@ -1,6 +1,7 @@
 from sentence_transformers import SentenceTransformer
 from langchain.schema import Document
 from typing import List
+import numpy as np
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
@@ -23,3 +24,10 @@ class EmbeddingGenerator:
             })
         
         return results
+    
+    def embed_matrix_gen(self, embed_results):
+        embeddings = [item["embedding"] for item in embed_results]
+
+        embedding_matrix = np.array(embeddings, dtype=np.float32)
+
+        return embedding_matrix
