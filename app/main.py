@@ -27,19 +27,13 @@ embed_results = embedding_generator.embed_documents(split_docs)
 embed_matrix = embedding_generator.embed_matrix_gen(embed_results)
 # print(f"embed result: {embed_results}")
 
+# Save metadata in a list
 metadata_list = [{"text": item["text"], "metadata": item["metadata"]} for item in embed_results]
 
-print(f"shape: {embed_matrix.shape[1]}")
-print(f"dimensions: {embed_matrix.ndim}")
 
-
-faiss_handler_obj = FaissHandler(embed_matrix.shape[1])
+# Handle faiss insert and query
+faiss_handler_obj = FaissHandler(embed_matrix.shape[1], metadata_list)
 faiss_handler_obj.embedding_insert(embed_matrix)
 
 query = "“I am no child,” Elara said firmly"
-test_retreive_query = embedding_generator.model.encode([query], convert_to_numpy=True).astype(np.float32)
-
-k = 3
-distance, indices = faiss_handler_obj.index.search(test_retreive_query, k)
-
-print([metadata_list[i]["text"] for i in indices[0]])
+search_results = faiss_handler_obj.similarity_search(query, embedding_generator)
